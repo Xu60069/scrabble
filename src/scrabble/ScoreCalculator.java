@@ -24,6 +24,5 @@ public class ScoreCalculator {
         return score1;
     }
     
-    private int score1;
-    
+    private int score1;    
 }

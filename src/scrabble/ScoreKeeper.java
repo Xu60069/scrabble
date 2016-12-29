@@ -25,10 +25,10 @@ public class ScoreKeeper extends javax.swing.JFrame {
    //     engine.findMatch(wordMatcher);
         wordMatcher.buildLetters("daofllt", "e");
         engine.findMatch(wordMatcher);
-        int score = engine.computeScore("floated", 2, 6, true);
-        System.out.println(score);
-        engine.enterWord("floated", 11, 2, true);
         engine.enterWord("amused", 7, 7, false);
+        int score = engine.computeScore("fall", 7, 6, true);
+        System.out.println(score);
+        engine.enterWord("fall", 7, 6, true);
     }
 
     /**
@@ -390,9 +390,9 @@ public class ScoreKeeper extends javax.swing.JFrame {
     private ScoreCalculator []calculator = new ScoreCalculator[4]; 
     
     {
-    for (int i = 0; i<3; i++){
-        calculator[i] = new ScoreCalculator();
-    }
+        for (int i = 0; i<3; i++){
+            calculator[i] = new ScoreCalculator();
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

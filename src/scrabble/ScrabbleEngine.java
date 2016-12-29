@@ -100,6 +100,8 @@ public class ScrabbleEngine {
         int multiplier = 1;
         if (horizontal == true) {
         for (int j = column; j<word.length()+column; j++){
+            if (scoreBoard[row][j] > 0)
+                continue;            
             if (scoreMod[row][j] == 2){
                 builder.append(word.charAt(j-column));
             }
@@ -114,6 +116,8 @@ public class ScrabbleEngine {
         }
         else if (horizontal == false){
             for (int i = row; i<word.length()+row; i++){
+            if (scoreBoard[i][column] > 0)
+                continue;   
             if (scoreMod[i][column] == 2){
                 builder.append(word.charAt(i-row));
             }
@@ -145,7 +149,11 @@ public class ScrabbleEngine {
         
         for (int i = 0; i<boardSize; i++){
             for(int j = 0; j<boardSize; j++){
-                System.out.print(scoreBoard[i][j] + " ");
+                if (scoreBoard[i][j] > 0)
+                    System.out.print(scoreBoard[i][j]);
+                else {
+                    System.out.print("*");
+                }
             }
             System.out.println();
         }
