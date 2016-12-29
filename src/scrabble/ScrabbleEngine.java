@@ -95,7 +95,7 @@ public class ScrabbleEngine {
         }
     }
     
-    public int computeScore(String word, int row, int column, boolean horizontal){
+    public int computeScore(String word, int row, int column, boolean horizontal, ScoreCalculator calculator){
         StringBuilder builder = new StringBuilder();
         int multiplier = 1;
         if (horizontal == true) {
@@ -131,7 +131,7 @@ public class ScrabbleEngine {
             }
         }
         System.out.println(builder + " Multiplier is " + multiplier);
-        return new ScoreCalculator().calculate(word+builder, multiplier);
+        return calculator.calculate(word+builder, multiplier);
     }
     
     public void enterWord(String word, int row, int column, boolean horizontal){
