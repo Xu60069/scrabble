@@ -316,9 +316,7 @@ public class ScoreKeeper extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_wordField1ActionPerformed
-
-    private void addButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButton1ActionPerformed
-        // TODO add your handling code here:
+    private void addButtonActionPerformed(ScoreCalculator calculator, javax.swing.JTextField scoreField){
         String word = wordField1.getText().toLowerCase();
         wordField1.setText("");
         wordField1.requestFocus();
@@ -328,8 +326,12 @@ public class ScoreKeeper extends javax.swing.JFrame {
         int rowInt = Integer.parseInt(row);
         int columnInt = Integer.parseInt(column);
         System.out.println("Row = "+row+", column = "+column+". Horizontal = "+bHorizontal+".");
-        int score = engine.computeScore(word, rowInt, columnInt, bHorizontal, calculator[0]);
-        scoreField1.setText(""+score);
+        int score = engine.computeScore(word, rowInt, columnInt, bHorizontal, calculator);
+        scoreField.setText(""+score);
+    }
+    private void addButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButton1ActionPerformed
+        // TODO add your handling code here:
+        addButtonActionPerformed(calculator[0], scoreField1);
     }//GEN-LAST:event_addButton1ActionPerformed
 
     private void scoreField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scoreField1ActionPerformed
@@ -354,29 +356,17 @@ public class ScoreKeeper extends javax.swing.JFrame {
 
     private void addButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButton2ActionPerformed
         // TODO add your handling code here:
-        String word = wordField1.getText().toLowerCase();
-        wordField1.setText("");
-        wordField1.requestFocus();
-        int score = calculator[1].calculate(word, selected);
-        scoreField2.setText(""+score);
+        addButtonActionPerformed(calculator[1], scoreField2);
     }//GEN-LAST:event_addButton2ActionPerformed
 
     private void addButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButton3ActionPerformed
         // TODO add your handling code here:
-        String word = wordField1.getText().toLowerCase();
-        wordField1.setText("");
-        wordField1.requestFocus();
-        int score = calculator[2].calculate(word, selected);
-        scoreField3.setText(""+score);
+        addButtonActionPerformed(calculator[2], scoreField3);
     }//GEN-LAST:event_addButton3ActionPerformed
 
     private void addButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButton4ActionPerformed
         // TODO add your handling code here:
-        String word = wordField1.getText().toLowerCase();
-        wordField1.setText("");
-        wordField1.requestFocus();
-        int score = calculator[3].calculate(word, selected);
-        scoreField4.setText(""+score);
+        addButtonActionPerformed(calculator[3], scoreField4);
     }//GEN-LAST:event_addButton4ActionPerformed
 
     private void scoreField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scoreField2ActionPerformed
@@ -441,7 +431,7 @@ public class ScoreKeeper extends javax.swing.JFrame {
     private ScoreCalculator []calculator = new ScoreCalculator[4]; 
     
     {
-        for (int i = 0; i<3; i++){
+        for (int i = 0; i<4; i++){
             calculator[i] = new ScoreCalculator();
         }
     }
