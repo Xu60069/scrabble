@@ -178,6 +178,19 @@ public class ScrabbleEngine {
     }
     
     private boolean isValid(String word, int row, int column, boolean horizontal){
+        if (row < 0 || column < 0) {
+            return false;
+        }
+        if (horizontal = true){
+            if (column+word.length()>boardSize){
+                return false;
+            }
+        }
+        if (horizontal = false){
+            if (row+word.length()>boardSize){
+                return false;
+            }
+        }
         return true;
     }
     
