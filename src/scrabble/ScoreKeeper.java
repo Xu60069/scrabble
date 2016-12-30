@@ -18,13 +18,13 @@ public class ScoreKeeper extends javax.swing.JFrame {
     public ScoreKeeper() {
         selected = 1;
         initComponents();
-        ScrabbleEngine engine = new ScrabbleEngine();
         engine.initDictionary("ospd.txt");
         WordMatcher wordMatcher = new WordMatcher();
         wordMatcher.buildLetters("daofllt", "e");
         engine.findMatch(wordMatcher);
         engine.enterWord("amused", 7, 7, false);
-        int score = engine.computeScore("fall", 7, 6, true);
+        ScoreCalculator calculator = new ScoreCalculator();
+        int score = engine.computeScore("fall", 7, 6, true, calculator);
         System.out.println(score);
         engine.enterWord("fall", 7, 6, true);
         engine.computeBestMatchForOne("amusede", 7, 7, true, 0);
@@ -45,9 +45,6 @@ public class ScoreKeeper extends javax.swing.JFrame {
         addButton1 = new javax.swing.JButton();
         scoreField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        singleWord = new javax.swing.JRadioButton();
-        doubleWord = new javax.swing.JRadioButton();
-        tripleWord = new javax.swing.JRadioButton();
         player2 = new javax.swing.JLabel();
         player3 = new javax.swing.JLabel();
         player4 = new javax.swing.JLabel();
@@ -57,6 +54,15 @@ public class ScoreKeeper extends javax.swing.JFrame {
         scoreField2 = new javax.swing.JTextField();
         scoreField3 = new javax.swing.JTextField();
         scoreField4 = new javax.swing.JTextField();
+        rowField = new javax.swing.JTextField();
+        columnField = new javax.swing.JTextField();
+        horizontalBox = new javax.swing.JCheckBox();
+        jButton1 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        jTextField4 = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -92,35 +98,6 @@ public class ScoreKeeper extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Enter your words to find the total score");
-
-        buttonGroup1.add(singleWord);
-        singleWord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        singleWord.setSelected(true);
-        singleWord.setText("Single Word");
-        singleWord.setName(""); // NOI18N
-        singleWord.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                singleWordActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(doubleWord);
-        doubleWord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        doubleWord.setText("Double Word");
-        doubleWord.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                doubleWordActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(tripleWord);
-        tripleWord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tripleWord.setText("Triple Word");
-        tripleWord.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tripleWordActionPerformed(evt);
-            }
-        });
 
         player2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         player2.setText("Player 3");
@@ -188,6 +165,40 @@ public class ScoreKeeper extends javax.swing.JFrame {
             }
         });
 
+        rowField.setText("Row");
+        rowField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rowFieldActionPerformed(evt);
+            }
+        });
+
+        columnField.setText("Column");
+
+        horizontalBox.setText("Horizontal");
+        horizontalBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                horizontalBoxActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Find Best Word");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jTextField1.setText("jTextField1");
+
+        jTextField2.setText("jTextField2");
+
+        jTextField3.setText("jTextField3");
+
+        jTextField4.setText("jTextField4");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setText("Enter letters to find your best word");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -195,62 +206,82 @@ public class ScoreKeeper extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(jLabel1))
+                        .addGap(38, 38, 38)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(player2, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(player1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(player3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(player4, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(wordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(columnField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(35, 35, 35)
-                                .addComponent(wordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(45, 45, 45)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(player2, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(player1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(player3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(player4, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(56, 56, 56)
+                                .addComponent(rowField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(horizontalBox)))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(addButton1)
-                                .addGap(18, 18, 18)
-                                .addComponent(scoreField1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(tripleWord)
-                            .addComponent(doubleWord)
-                            .addComponent(singleWord)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(addButton4)
                                 .addGap(18, 18, 18)
                                 .addComponent(scoreField4, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(addButton2)
-                                .addGap(18, 18, 18)
-                                .addComponent(scoreField2, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(addButton3)
                                 .addGap(18, 18, 18)
-                                .addComponent(scoreField3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(136, Short.MAX_VALUE))
+                                .addComponent(scoreField3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(addButton1)
+                                .addGap(18, 18, 18)
+                                .addComponent(scoreField1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(addButton2)
+                                .addGap(18, 18, 18)
+                                .addComponent(scoreField2, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(187, 187, 187)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addContainerGap(75, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addComponent(jLabel1)
-                .addGap(16, 16, 16)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(singleWord)
-                    .addComponent(wordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(1, 1, 1)
-                .addComponent(doubleWord)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(tripleWord)
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(25, 25, 25)
+                .addComponent(wordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rowField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(horizontalBox))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addComponent(columnField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addButton1)
                     .addComponent(scoreField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(player1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                    .addComponent(player1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(player3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -270,6 +301,16 @@ public class ScoreKeeper extends javax.swing.JFrame {
                     .addComponent(addButton4)
                     .addComponent(scoreField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -280,14 +321,23 @@ public class ScoreKeeper extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_wordField1ActionPerformed
-
-    private void addButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButton1ActionPerformed
-        // TODO add your handling code here:
+    private void addButtonActionPerformed(ScoreCalculator calculator, javax.swing.JTextField scoreField){
         String word = wordField1.getText().toLowerCase();
         wordField1.setText("");
         wordField1.requestFocus();
-        int score = calculator[0].calculate(word, selected);
-        scoreField1.setText(""+score);
+        //int score = calculator[0].calculate(word, selected);
+        String row = rowField.getText();
+        String column = columnField.getText();
+        int rowInt = Integer.parseInt(row);
+        int columnInt = Integer.parseInt(column);
+        System.out.println("Row = "+row+", column = "+column+". Horizontal = "+bHorizontal+".");
+        int score = engine.computeScore(word, rowInt, columnInt, bHorizontal, calculator);
+        scoreField.setText(""+score);
+        engine.enterWord(word, rowInt, columnInt, bHorizontal);
+    }
+    private void addButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButton1ActionPerformed
+        // TODO add your handling code here:
+        addButtonActionPerformed(calculator[0], scoreField1);
     }//GEN-LAST:event_addButton1ActionPerformed
 
     private void scoreField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scoreField1ActionPerformed
@@ -295,46 +345,19 @@ public class ScoreKeeper extends javax.swing.JFrame {
         
     }//GEN-LAST:event_scoreField1ActionPerformed
 
-    private void singleWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_singleWordActionPerformed
-        // TODO add your handling code here:
-        selected = 1;
-    }//GEN-LAST:event_singleWordActionPerformed
-
-    private void tripleWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tripleWordActionPerformed
-        // TODO add your handling code here:
-        selected = 3;
-    }//GEN-LAST:event_tripleWordActionPerformed
-
-    private void doubleWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doubleWordActionPerformed
-        // TODO add your handling code here:
-        selected = 2;
-    }//GEN-LAST:event_doubleWordActionPerformed
-
     private void addButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButton2ActionPerformed
         // TODO add your handling code here:
-        String word = wordField1.getText().toLowerCase();
-        wordField1.setText("");
-        wordField1.requestFocus();
-        int score = calculator[1].calculate(word, selected);
-        scoreField2.setText(""+score);
+        addButtonActionPerformed(calculator[1], scoreField2);
     }//GEN-LAST:event_addButton2ActionPerformed
 
     private void addButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButton3ActionPerformed
         // TODO add your handling code here:
-        String word = wordField1.getText().toLowerCase();
-        wordField1.setText("");
-        wordField1.requestFocus();
-        int score = calculator[2].calculate(word, selected);
-        scoreField3.setText(""+score);
+        addButtonActionPerformed(calculator[2], scoreField3);
     }//GEN-LAST:event_addButton3ActionPerformed
 
     private void addButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButton4ActionPerformed
         // TODO add your handling code here:
-        String word = wordField1.getText().toLowerCase();
-        wordField1.setText("");
-        wordField1.requestFocus();
-        int score = calculator[3].calculate(word, selected);
-        scoreField4.setText(""+score);
+        addButtonActionPerformed(calculator[3], scoreField4);
     }//GEN-LAST:event_addButton4ActionPerformed
 
     private void scoreField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scoreField2ActionPerformed
@@ -348,6 +371,19 @@ public class ScoreKeeper extends javax.swing.JFrame {
     private void scoreField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scoreField4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_scoreField4ActionPerformed
+
+    private void rowFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rowFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rowFieldActionPerformed
+
+    private void horizontalBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_horizontalBoxActionPerformed
+        // TODO add your handling code here:
+        bHorizontal = !bHorizontal;
+    }//GEN-LAST:event_horizontalBoxActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -384,12 +420,13 @@ public class ScoreKeeper extends javax.swing.JFrame {
             }
         });
     }
-    
+    ScrabbleEngine engine = new ScrabbleEngine();
+    boolean bHorizontal = false;
     private int selected;
     private ScoreCalculator []calculator = new ScoreCalculator[4]; 
     
     {
-        for (int i = 0; i<3; i++){
+        for (int i = 0; i<4; i++){
             calculator[i] = new ScoreCalculator();
         }
     }
@@ -400,18 +437,24 @@ public class ScoreKeeper extends javax.swing.JFrame {
     private javax.swing.JButton addButton3;
     private javax.swing.JButton addButton4;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JRadioButton doubleWord;
+    private javax.swing.JTextField columnField;
+    private javax.swing.JCheckBox horizontalBox;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
     private javax.swing.JLabel player1;
     private javax.swing.JLabel player2;
     private javax.swing.JLabel player3;
     private javax.swing.JLabel player4;
+    private javax.swing.JTextField rowField;
     private javax.swing.JTextField scoreField1;
     private javax.swing.JTextField scoreField2;
     private javax.swing.JTextField scoreField3;
     private javax.swing.JTextField scoreField4;
-    private javax.swing.JRadioButton singleWord;
-    private javax.swing.JRadioButton tripleWord;
     private javax.swing.JTextField wordField1;
     // End of variables declaration//GEN-END:variables
 }
