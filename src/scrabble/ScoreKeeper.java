@@ -21,14 +21,13 @@ public class ScoreKeeper extends javax.swing.JFrame {
         ScrabbleEngine engine = new ScrabbleEngine();
         engine.initDictionary("ospd.txt");
         WordMatcher wordMatcher = new WordMatcher();
- //       wordMatcher.buildLetters("mesduaa");
-   //     engine.findMatch(wordMatcher);
         wordMatcher.buildLetters("daofllt", "e");
         engine.findMatch(wordMatcher);
         engine.enterWord("amused", 7, 7, false);
         int score = engine.computeScore("fall", 7, 6, true);
         System.out.println(score);
         engine.enterWord("fall", 7, 6, true);
+        engine.computeBestMatchForOne("amusede", 7, 7, true, 0);
     }
 
     /**

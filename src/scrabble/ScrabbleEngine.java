@@ -134,6 +134,42 @@ public class ScrabbleEngine {
         return new ScoreCalculator().calculate(word+builder, multiplier);
     }
     
+    public int computeBestMatchForOne(String letters, int row, int column, boolean horizontal, int lastBest){
+        WordMatcher match = new WordMatcher();
+        match.buildLetters(letters, Character.toString((char)scoreBoard[row][column]));
+        String bestWord = null;
+        int bestRow = 0;
+        int bestColumn = 0;
+        for (String word : dict){
+            if (!match.matchWord(word)) {
+                continue;
+            }
+            int index = word.indexOf(scoreBoard[row][column]); //test fantastic-second index for a 
+            int column1 = column;
+            int row1 = row;
+            if (horizontal)
+                column1 -= index;
+            else 
+                row1 -= index;
+            if (!isValid(word, row1, column1))
+                continue;
+            int score = computeScore(word, row1, column1, horizontal);            
+            if (score > lastBest){
+                bestWord = word;
+                bestRow = row1;
+                bestColumn = column1;
+                lastBest = score;
+                System.out.println(bestWord + " " + score + lastBest);                
+            }
+        }              
+        System.out.println("This is my test#############");
+        return lastBest;
+    }
+    
+    private boolean isValid(String word, int row, int column){
+        return true;
+    }
+    
     public void enterWord(String word, int row, int column, boolean horizontal){
         if (horizontal == true) {
             for (int j = column; j<word.length()+column; j++){
