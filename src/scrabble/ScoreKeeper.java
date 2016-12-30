@@ -19,16 +19,10 @@ public class ScoreKeeper extends javax.swing.JFrame {
         selected = 1;
         initComponents();
         engine.initDictionary("ospd.txt");
-        WordMatcher wordMatcher = new WordMatcher();
-        wordMatcher.buildLetters("daofllt", "e");
-        engine.findMatch(wordMatcher);
         engine.enterWord("amused", 7, 7, false);
-        ScoreCalculator calculator = new ScoreCalculator();
-        int score = engine.computeScore("fall", 7, 6, true, calculator);
-        System.out.println(score);
-        engine.enterWord("fall", 7, 6, true);
-        engine.computeBestMatchForOne("amusede", 7, 7, true, 0);
+   //     engine.computeBestMatchForOne("amusede", 7, 7, true, 0);
         display.setText(engine.printBoard());
+        
         
     }
 
@@ -349,6 +343,7 @@ public class ScoreKeeper extends javax.swing.JFrame {
         int score = engine.computeScore(word, rowInt, columnInt, bHorizontal, calculator);
         scoreField.setText(""+score);
         engine.enterWord(word, rowInt, columnInt, bHorizontal);
+        display.setText(engine.printBoard());
     }
     private void addButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButton1ActionPerformed
         // TODO add your handling code here:
@@ -398,6 +393,10 @@ public class ScoreKeeper extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        BestResult result = engine.findBestMatch(jTextField1.getText());
+        jTextField2.setText(result.word);
+        jTextField3.setText(""+result.row);
+        jTextField4.setText(""+result.column);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

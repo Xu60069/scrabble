@@ -14,12 +14,19 @@ import java.util.Set;
  *
  * @author student
  */
+class BestResult {
+    public String word = null;
+    public int row = 0;
+    public int column = 0;
+    public int score = 0;
+}
+
 public class ScrabbleEngine {
     private Set<String> dict = new HashSet<String>(); 
     final int boardSize = 15;
     char [][]scoreBoard = new char[boardSize][boardSize];
     int [][]scoreMod = new int[boardSize][boardSize];
-    
+   
     
     public ScrabbleEngine(){
         int mid = boardSize/2;
@@ -87,12 +94,20 @@ public class ScrabbleEngine {
       System.out.println(dict.size());
     }
     
-    public void findMatch(WordMatcher matcher){
-        for (String word : dict){
-            if (matcher.matchWord(word)) {
-                System.out.println(word);
-            }            
+    public BestResult findBestMatch(String letters){
+        BestResult result = new BestResult();        
+        for (int i = 0; i<boardSize; i++){
+            for(int j = 0; j<boardSize; j++){
+                if (scoreBoard[i][j] > 0){
+                    if (j>0){                        
+                        if (scoreBoard[i][j-1] == 0){
+                            result = computeBestMatchForOne(letters, i, j, true, result);
+                        }
+                    }
+                }
+            }
         }
+        return result;
     }
     
     public int computeScore(String word, int row, int column, boolean horizontal, ScoreCalculator calculator){
@@ -134,12 +149,9 @@ public class ScrabbleEngine {
         return calculator.calculate(word+builder, multiplier);
     }
     
-    public int computeBestMatchForOne(String letters, int row, int column, boolean horizontal, int lastBest){
+    public BestResult computeBestMatchForOne(String letters, int row, int column, boolean horizontal, BestResult result){
         WordMatcher match = new WordMatcher();
         match.buildLetters(letters, Character.toString((char)scoreBoard[row][column]));
-        String bestWord = null;
-        int bestRow = 0;
-        int bestColumn = 0;
         for (String word : dict){
             if (!match.matchWord(word)) {
                 continue;
@@ -151,21 +163,21 @@ public class ScrabbleEngine {
                 column1 -= index;
             else 
                 row1 -= index;
-            if (!isValid(word, row1, column1))
+            if (!isValid(word, row1, column1, horizontal))
                 continue;
             int score = computeScore(word, row1, column1, horizontal, new ScoreCalculator());            
-            if (score > lastBest){
-                bestWord = word;
-                bestRow = row1;
-                bestColumn = column1;
-                lastBest = score;
-                System.out.println(bestWord + " " + score + " row: " + row1 + " column: " + column1);                
+            if (score > result.score){
+                result.word = word;
+                result.row = row1;
+                result.column = column1;
+                result.score = score;
+                System.out.println(result.word + " " + result.score + " row: " + row1 + " column: " + column1);                
             }
         }
-        return lastBest;
+        return result;
     }
     
-    private boolean isValid(String word, int row, int column){
+    private boolean isValid(String word, int row, int column, boolean horizontal){
         return true;
     }
     
