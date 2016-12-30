@@ -130,7 +130,7 @@ public class ScrabbleEngine {
             }        
             }
         }
-        System.out.println(builder + " Multiplier is " + multiplier);
+    //    System.out.println(builder + " Multiplier is " + multiplier);
         return calculator.calculate(word+builder, multiplier);
     }
     
@@ -153,16 +153,15 @@ public class ScrabbleEngine {
                 row1 -= index;
             if (!isValid(word, row1, column1))
                 continue;
-            int score = computeScore(word, row1, column1, horizontal);            
+            int score = computeScore(word, row1, column1, horizontal, new ScoreCalculator());            
             if (score > lastBest){
                 bestWord = word;
                 bestRow = row1;
                 bestColumn = column1;
                 lastBest = score;
-                System.out.println(bestWord + " " + score + lastBest);                
+                System.out.println(bestWord + " " + score + " row: " + row1 + " column: " + column1);                
             }
-        }              
-        System.out.println("This is my test#############");
+        }
         return lastBest;
     }
     
@@ -181,19 +180,28 @@ public class ScrabbleEngine {
             for (int i = row; i<word.length()+row; i++){
                 scoreBoard[i][column] = word.charAt(i-row);
             }
-        }
-        
+        }        
+        System.out.println(printBoard());
+    }
+    
+    public String printBoard(){
+        StringBuilder build = new StringBuilder();
         for (int i = 0; i<boardSize; i++){
             for(int j = 0; j<boardSize; j++){
                 if (scoreBoard[i][j] > 0)
-                    System.out.print(scoreBoard[i][j]);
+                    build.append(scoreBoard[i][j]);
                 else {
-                    System.out.print("*");
+                    build.append("*");
                 }
             }
-            System.out.println();
+            build.append("\r\n"); //windows formatting new line
+            
         }
+        return build.toString();
     }
+    
+    
+    
 }
 
 
