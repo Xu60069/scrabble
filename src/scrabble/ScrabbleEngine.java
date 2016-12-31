@@ -19,6 +19,7 @@ class BestResult {
     public int row = 0;
     public int column = 0;
     public int score = 0;
+    public boolean horizontal = true;
 }
 
 public class ScrabbleEngine {
@@ -91,7 +92,25 @@ public class ScrabbleEngine {
       catch(Exception e){
          e.printStackTrace();
       }
-      System.out.println(dict.size());
+      System.out.println("dictionary size: " + dict.size());
+    }
+    
+    public void findMatch(String letters){ //get best position, best score
+        WordMatcher matcher = new WordMatcher();
+        matcher.buildLetters(letters);
+        int bestScore = 0;
+        String bestWord = null;
+        for (String word : dict){
+            if (matcher.matchWord(word)) {
+                int score = computeScore(word, 7, 7, true, new ScoreCalculator());
+                if (score > bestScore) {
+                    bestWord = word;
+                    bestScore = score;
+                    System.out.println(bestWord + bestScore);
+                }    
+            }
+        }
+        System.out.println(bestWord + bestScore);
     }
     
     public BestResult findBestMatch(String letters){
@@ -171,6 +190,7 @@ public class ScrabbleEngine {
                 result.row = row1;
                 result.column = column1;
                 result.score = score;
+                result.horizontal = horizontal;
                 System.out.println(result.word + " " + result.score + " row: " + row1 + " column: " + column1);                
             }
         }
