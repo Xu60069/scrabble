@@ -197,6 +197,15 @@ public class ScrabbleEngine {
         return result;
     }
     
+    public List<BestResult> checkVerticalWord(String word, int row, int col){
+        return new ArrayList<>();
+    }
+    
+    public List<BestResult> checkHorizontalWord(String word, int row, int col){
+        return new ArrayList<>();
+    }
+
+    
     public boolean isValid(String word, int row, int column, boolean horizontal){
         if (row < 0 || column < 0) {
             return false;
@@ -237,7 +246,10 @@ public class ScrabbleEngine {
                 return false;
             }
         }
-        
+        if (horizontal = true)
+            checkVerticalWord(word, row, column); //loop through list, check every word to see if valid
+        if (!horizontal)
+            checkHorizontalWord(word, row, column);
         return true;
     }
     
