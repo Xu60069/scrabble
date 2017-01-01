@@ -7,8 +7,10 @@ package scrabble;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 
 /**
  *
@@ -198,7 +200,8 @@ public class ScrabbleEngine {
     }
     
     public List<BestResult> checkVerticalWord(String word, int row, int col){
-        return new ArrayList<>();
+        List<BestResult> results = new ArrayList<>();
+        return results;
     }
     
     public List<BestResult> checkHorizontalWord(String word, int row, int col){
