@@ -97,7 +97,7 @@ public class ScrabbleEngine {
       System.out.println("dictionary size: " + dict.size());
     }
     
-    public void findMatch(String letters){ //get best position, best score
+    public void findMatch(String letters){ //get best position, best score for first time
         WordMatcher matcher = new WordMatcher();
         matcher.buildLetters(letters);
         int bestScore = 0;
@@ -120,10 +120,12 @@ public class ScrabbleEngine {
         for (int i = 0; i<boardSize; i++){
             for(int j = 0; j<boardSize; j++){
                 if (scoreBoard[i][j] > 0){
-                    if (j>0){                        
-                        if (scoreBoard[i][j-1] == 0){
-                            result = computeBestMatchForOne(letters, i, j, true, result);
-                        }
+                    if (j==0 || scoreBoard[i][j-1] == 0){                        
+                         //check extend words---
+                        result = computeBestMatchForOne(letters, i, j, true, result);                        
+                    }
+                    if (i==0 || scoreBoard[i-1][j] == 0){
+                        result = computeBestMatchForOne(letters, i, j, false, result);   
                     }
                 }
             }
