@@ -246,10 +246,17 @@ public class ScrabbleEngine {
                 return false;
             }
         }
+        List<BestResult> results;
         if (horizontal = true)
-            checkVerticalWord(word, row, column); //loop through list, check every word to see if valid
-        if (!horizontal)
-            checkHorizontalWord(word, row, column); //same
+            results = checkVerticalWord(word, row, column); //loop through list, check every word to see if valid        
+        else
+            results = checkHorizontalWord(word, row, column); //same
+        for (BestResult result : results) {
+            if (!dict.contains(result.word)){
+                return false;
+            }
+        }
+        
         return true;
     }
     
