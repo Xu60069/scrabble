@@ -45,7 +45,7 @@ public class WordMatcher {
     }
     
     public void buildLetters(String myLetters, String matchLetter){
-        buildLetters(myLetters);
+        buildLetters(myLetters.toLowerCase());
         for (int i = 0; i<matchLetter.length(); i++){ //put your letters into count
             letterCount[matchLetter.charAt(i)-'a']++;
         }

@@ -154,10 +154,10 @@ public class ScrabbleEngine {
         }
         else if (horizontal == false){
             for (int i = row; i<word.length()+row; i++){
-            if (scoreBoard[i][column] > 0)
-                continue;   
-            if (scoreMod[i][column] == 2){
-                builder.append(word.charAt(i-row));
+                if (scoreBoard[i][column] > 0)
+                    continue;   
+                if (scoreMod[i][column] == 2){
+                    builder.append(word.charAt(i-row));
             }
             else if (scoreMod[i][column] == 3){
                 builder.append(word.charAt(i-row));
@@ -188,6 +188,7 @@ public class ScrabbleEngine {
                 row1 -= index;
             if (!isValid(word, row1, column1, horizontal))
                 continue;
+     //       System.out.println(word+" r "+row1+" c "+column1+" "+horizontal);
             int score = computeScore(word, row1, column1, horizontal, new ScoreCalculator());            
             if (score > result.score){
                 result.word = word;
@@ -195,24 +196,38 @@ public class ScrabbleEngine {
                 result.column = column1;
                 result.score = score;
                 result.horizontal = horizontal;
-                System.out.println(result.word + " " + result.score + " row: " + row1 + " column: " + column1);                
+                System.out.println(result.word + " " + result.score + " row: " + row1 + " column: " + column1 + horizontal);                
             }
         }
         return result;
     }
     
+    int findTopStart(int row, int col)
+    {
+        if (row==0)    //at the top edge
+            return 0;
+        for (int i = row-1; i>=0; i--){ //word hasn't been put on board, so row-1
+            if (scoreBoard[i][col]==0){
+                return i+1;
+            }
+        }
+        return 0;
+    }
+    
     public List<BestResult> checkVerticalWord(String word, int row, int col){
         List<BestResult> results = new ArrayList<>();
         for (int j = col; j < word.length()+col; j++){
-            int i = row;
-            for ( ; i>=0; i--){
-                if (scoreBoard[i][j]==0){
-                    break;
-                }
+            if (scoreBoard[row][j] > 0){   //if the letter already exists there - bc new word hasn't been put on board
+                continue;
             }
+            int newi = findTopStart(row, j); 
+            System.out.println("find vertical word for "+word+" " +row+" "+col+" start "+newi);           
             StringBuilder builder = new StringBuilder();
-            for (int k=i; k<boardSize; k++){
-                if (scoreBoard[k][j]>0){
+            for (int k=newi; k<boardSize; k++){
+                if (k == row){ //if the row is on your own word
+                    builder.append(word.charAt(j-col)); //put your letter in
+                }
+                else if (scoreBoard[k][j]>0){
                     builder.append(scoreBoard[k][j]);
                 }
                 else {
@@ -222,28 +237,44 @@ public class ScrabbleEngine {
             if (builder.length()>1){
                 BestResult result = new BestResult();
                 result.word = builder.toString();
-                result.row = i;
+                result.row = newi;
                 result.column = j;
                 result.horizontal = false;
                 results.add(result);
+                System.out.println("find vertical word "+result.word+" r "+newi+" c "+j);
             }
         }
         return results;
     }
     
+    int findLeftStart(int row, int col)
+    {
+        if (col == 0)
+            return 0;
+        for (int i = col-1; i>=0; i--){  // find left most space
+            if (scoreBoard[row][i]==0){
+                return i+1;
+            }
+        }
+        return 0;
+    }
+    
     public List<BestResult> checkHorizontalWord(String word, int row, int col){
         List<BestResult> results = new ArrayList<>();
-        for (int j = row; j < word.length()+row; j++){
-            int i = col;
-            for ( ; i>=0; i--){
-                if (scoreBoard[i][j]==0){
-                    break;
-                }
+        //System.out.println("find horizontal word for "+word);
+        for (int r = row; r < word.length()+row; r++){
+            if (scoreBoard[r][col] > 0){   //if the letter already exists there - bc new word hasn't been put on board
+                continue;
             }
+            int iStart = findLeftStart(r, col);
+            System.out.println("find horizontal word for "+word+" start "+iStart);
             StringBuilder builder = new StringBuilder();
-            for (int k=i; k<boardSize; k++){
-                if (scoreBoard[k][j]>0){
-                    builder.append(scoreBoard[k][j]);
+            for (int k=iStart; k<boardSize; k++){ //add letter from left most blank space
+                if (k == col){ //if the row is on your own word
+                    builder.append(word.charAt(r-row)); //put your letter in
+                }
+                else if (scoreBoard[r][k]>0){
+                    builder.append(scoreBoard[r][k]);
                 }
                 else {
                     break;
@@ -252,10 +283,11 @@ public class ScrabbleEngine {
             if (builder.length()>1){
                 BestResult result = new BestResult();
                 result.word = builder.toString();
-                result.column = i;
-                result.row = j;
+                result.column = iStart;
+                result.row = r;
                 result.horizontal = true;
                 results.add(result);
+                System.out.println("find horizontal word "+result.word+" r "+r+" c "+iStart);
             }
         }
         return results;
@@ -266,10 +298,12 @@ public class ScrabbleEngine {
         if (row < 0 || column < 0) {
             return false;
         }
-        if (horizontal = true){
+        if (horizontal){
+            //System.out.println("horizontal, " + word + column);
             if (column+word.length()>boardSize){
                 return false;
             }
+            
             for (int j = column; j < word.length()+column; j++){
                 if (scoreBoard[row][j] > 0){
                     if (word.charAt(j-column) != scoreBoard[row][j]){
@@ -277,6 +311,7 @@ public class ScrabbleEngine {
                     }
                 }    
             }
+            //System.out.println("word within horizontal boundary + no overlap");
             if (column > 0 && scoreBoard[row][column-1] != 0){
                 return false;
             }
@@ -284,26 +319,28 @@ public class ScrabbleEngine {
                 return false;
             }
         }
-        if (horizontal = false){
-            if (row+word.length()>boardSize){
+        else {
+            if (row+word.length()>boardSize){ //boundary
                 return false;
             }
-            for (int i = row; i < word.length()+row; i++){
+            for (int i = row; i < word.length()+row; i++){ //no overlap
                 if (scoreBoard[i][column] > 0){
                     if (word.charAt(i-row) != scoreBoard[i][column]){
                         return false;
                     }
                 }
             }
+            //System.out.println("word within vertical boundary + no overlap");
             if (row > 0 && scoreBoard[row-1][column] != 0){
                 return false;
             }
+            // exceed bottom bound, or it connects to another word
             if (row+word.length() < boardSize && scoreBoard[row+word.length()][column] != 0){
                 return false;
             }
         }
         List<BestResult> results;
-        if (horizontal = true)
+        if (horizontal)
             results = checkVerticalWord(word, row, column); //loop through list, check every word to see if valid        
         else
             results = checkHorizontalWord(word, row, column); //same
@@ -311,6 +348,7 @@ public class ScrabbleEngine {
             if (!dict.contains(result.word)){
                 return false;
             }
+            System.out.println(result.word + result.horizontal);
         }
         
         return true;
