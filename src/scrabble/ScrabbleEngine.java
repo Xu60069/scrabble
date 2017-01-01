@@ -203,11 +203,62 @@ public class ScrabbleEngine {
     
     public List<BestResult> checkVerticalWord(String word, int row, int col){
         List<BestResult> results = new ArrayList<>();
+        for (int j = col; j < word.length()+col; j++){
+            int i = row;
+            for ( ; i>=0; i--){
+                if (scoreBoard[i][j]==0){
+                    break;
+                }
+            }
+            StringBuilder builder = new StringBuilder();
+            for (int k=i; k<boardSize; k++){
+                if (scoreBoard[k][j]>0){
+                    builder.append(scoreBoard[k][j]);
+                }
+                else {
+                    break;
+                }
+            }
+            if (builder.length()>1){
+                BestResult result = new BestResult();
+                result.word = builder.toString();
+                result.row = i;
+                result.column = j;
+                result.horizontal = false;
+                results.add(result);
+            }
+        }
         return results;
     }
     
     public List<BestResult> checkHorizontalWord(String word, int row, int col){
-        return new ArrayList<>();
+        List<BestResult> results = new ArrayList<>();
+        for (int j = row; j < word.length()+row; j++){
+            int i = col;
+            for ( ; i>=0; i--){
+                if (scoreBoard[i][j]==0){
+                    break;
+                }
+            }
+            StringBuilder builder = new StringBuilder();
+            for (int k=i; k<boardSize; k++){
+                if (scoreBoard[k][j]>0){
+                    builder.append(scoreBoard[k][j]);
+                }
+                else {
+                    break;
+                }
+            }
+            if (builder.length()>1){
+                BestResult result = new BestResult();
+                result.word = builder.toString();
+                result.column = i;
+                result.row = j;
+                result.horizontal = true;
+                results.add(result);
+            }
+        }
+        return results;
     }
 
     
