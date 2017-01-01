@@ -315,6 +315,41 @@ public class ScrabbleEngine {
         
         return true;
     }
+    public boolean isAboveEmpty(int row, int col){
+        int i = row-1;
+        if (scoreBoard[i][col]==0){
+            return true;
+        }
+        else 
+            return false;
+    }
+    
+    public boolean isBelowEmpty(int row, int col){
+        int i = row+1;
+        if (scoreBoard[i][col]==0){
+            return true;
+        }
+        else 
+            return false;
+    }
+    
+    public boolean isLeftEmpty(int row, int col){
+        int j = col-1;
+        if (scoreBoard[row][j]==0){
+            return true;
+        }
+        else 
+            return false;
+    }
+    
+    public boolean isRightEmpty(int row, int col){
+        int j = col+1;
+        if (scoreBoard[row][j]==0){
+            return true;
+        }
+        else 
+            return false;
+    }
     
     public void enterWord(String word, int row, int column, boolean horizontal){
         if (horizontal == true) {
