@@ -197,7 +197,7 @@ public class ScrabbleEngine {
         return result;
     }
     
-    private boolean isValid(String word, int row, int column, boolean horizontal){
+    public boolean isValid(String word, int row, int column, boolean horizontal){
         if (row < 0 || column < 0) {
             return false;
         }
@@ -205,12 +205,39 @@ public class ScrabbleEngine {
             if (column+word.length()>boardSize){
                 return false;
             }
+            for (int j = column; j < word.length()+column; j++){
+                if (scoreBoard[row][j] > 0){
+                    if (word.charAt(j-column) != scoreBoard[row][j]){
+                        return false;
+                    }
+                }    
+            }
+            if (column > 0 && scoreBoard[row][column-1] != 0){
+                return false;
+            }
+            if (column+word.length() < boardSize && scoreBoard[row][word.length()+column] != 0){
+                return false;
+            }
         }
         if (horizontal = false){
             if (row+word.length()>boardSize){
                 return false;
             }
+            for (int i = row; i < word.length()+row; i++){
+                if (scoreBoard[i][column] > 0){
+                    if (word.charAt(i-row) != scoreBoard[i][column]){
+                        return false;
+                    }
+                }
+            }
+            if (row > 0 && scoreBoard[row-1][column] != 0){
+                return false;
+            }
+            if (row+word.length() < boardSize && scoreBoard[row+word.length()][column] != 0){
+                return false;
+            }
         }
+        
         return true;
     }
     
