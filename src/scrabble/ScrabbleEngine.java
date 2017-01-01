@@ -249,7 +249,7 @@ public class ScrabbleEngine {
         if (horizontal = true)
             checkVerticalWord(word, row, column); //loop through list, check every word to see if valid
         if (!horizontal)
-            checkHorizontalWord(word, row, column);
+            checkHorizontalWord(word, row, column); //same
         return true;
     }
     
