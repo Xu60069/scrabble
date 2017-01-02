@@ -416,7 +416,14 @@ public class ScrabbleEngine {
         return build.toString();
     }
     
-    
+    public boolean checkWord(String word) {
+        if (dict.contains(word)){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     
 }
 
