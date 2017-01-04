@@ -11,6 +11,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 
 /**
  *
@@ -398,6 +406,14 @@ public class ScrabbleEngine {
             }
         }        
         System.out.println(printBoard());
+        try(FileWriter fw = new FileWriter("output.txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw))
+        {
+            out.println(row+","+column+","+word+","+""+horizontal);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
     public String printBoard(){
@@ -425,6 +441,31 @@ public class ScrabbleEngine {
         }
     }
     
+    public void reloadGame() {
+        try {
+            FileInputStream fis = null;
+            BufferedReader reader = null;
+            fis = new FileInputStream("output.txt");
+            reader = new BufferedReader(new InputStreamReader(fis));
+                      String line = reader.readLine();
+            while(line != null){
+                System.out.println(line);
+                line = reader.readLine();
+            }           
+            String[] parts = line.split(",");
+            String rowString = parts[0];
+            String columnString = parts[1];
+            String word = parts[2];
+            String horizontalString = parts[3];
+            int row = Integer.parseInt(rowString);
+            int column = Integer.parseInt(columnString);
+            boolean horizontal = Boolean.parseBoolean(horizontalString);
+            enterWord(word,row,column,horizontal);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 }
 
 
