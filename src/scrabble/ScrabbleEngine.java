@@ -361,10 +361,8 @@ public class ScrabbleEngine {
             if (!dict.contains(result.word)){
                 return -1;
             } //-1 means invalid, 0 above means score of extra words
-            
-            int score1 = computeScore(result.word, result.row, result.column, horizontal, calculator1);
-            score += score1;
-            System.out.println(score + result.word + result.horizontal);
+            score = computeScore(result.word, result.row, result.column, horizontal, calculator1);
+            System.out.println("score "+score + " "+result.word + result.horizontal);
         }
         return score;
     }
@@ -400,7 +398,7 @@ public class ScrabbleEngine {
         return (scoreBoard[row][j]==0);
     }
     
-    public void enterWord(String word, int row, int column, boolean horizontal){
+    public void enterWord(String word, int row, int column, boolean horizontal, int score,boolean write){
         if (horizontal == true) {
             for (int j = column; j<word.length()+column; j++){
                 scoreBoard[row][j] = word.charAt(j-column);
@@ -413,11 +411,13 @@ public class ScrabbleEngine {
             }
         }        
         System.out.println(printBoard());
+        if (!write)
+            return;
         try(FileWriter fw = new FileWriter("output.txt", true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw))
         {
-            out.println(row+","+column+","+word+","+""+horizontal);
+            out.println(row+","+column+","+word+","+""+horizontal + ", " + score);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -450,24 +450,23 @@ public class ScrabbleEngine {
     
     public void reloadGame() {
         try {
-            FileInputStream fis = null;
-            BufferedReader reader = null;
-            fis = new FileInputStream("output.txt");
-            reader = new BufferedReader(new InputStreamReader(fis));
-                      String line = reader.readLine();
+            FileInputStream fis = new FileInputStream("output.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+            String line = reader.readLine();
             while(line != null){
                 System.out.println(line);
+                String[] parts = line.split(",");
+                String rowString = parts[0];
+                String columnString = parts[1];
+                String word = parts[2];
+                String horizontalString = parts[3];
+                int row = Integer.parseInt(rowString);
+                int column = Integer.parseInt(columnString);
+                boolean horizontal = Boolean.parseBoolean(horizontalString);
+                enterWord(word,row,column,horizontal,0,false);
                 line = reader.readLine();
             }           
-            String[] parts = line.split(",");
-            String rowString = parts[0];
-            String columnString = parts[1];
-            String word = parts[2];
-            String horizontalString = parts[3];
-            int row = Integer.parseInt(rowString);
-            int column = Integer.parseInt(columnString);
-            boolean horizontal = Boolean.parseBoolean(horizontalString);
-            enterWord(word,row,column,horizontal);
+           
         }
         catch (IOException e){
             e.printStackTrace();

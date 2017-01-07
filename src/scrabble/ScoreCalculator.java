@@ -12,7 +12,7 @@ package scrabble;
 public class ScoreCalculator {
     
     public ScoreCalculator() {
-        score1 = 0;
+        totalScore = 0;
     }
     public int calculate(String word, int multiple) {
         final int[] scrabbleENScore={1,3,3,2,1,4,2,4,1,8,5,1,3,1,3,3,10,1,1,1,1,4,4,8,4,10};
@@ -20,9 +20,13 @@ public class ScoreCalculator {
         for (int i = 0; i < word.length(); i++){
             score += scrabbleENScore[word.charAt(i)-'a'];
         }
-        score1 += score*multiple;
-        return score1;
+        totalScore += score*multiple;
+        return totalScore;
     }
     
-    private int score1;    
+    public int addExtraScore(int score1){ //score from additional word
+        totalScore += score1;
+        return totalScore;
+    }
+    private int totalScore;    
 }

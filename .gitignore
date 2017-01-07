@@ -18,3 +18,4 @@ ospd.txt
 /dist/
 *build/
 nbproject/genfiles.properties
+output.txt
