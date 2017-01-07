@@ -169,10 +169,12 @@ public class ScrabbleEngine {
             }
         }
     //    System.out.println(builder + " Multiplier is " + multiplier);
+        
         return calculator.calculate(word+builder, multiplier);
     }
     
     public BestResult computeBestMatchForOne(String letters, int row, int column, boolean horizontal, BestResult result){
+        int score1 = 0;
         WordMatcher match = new WordMatcher();
         match.buildLetters(letters, Character.toString((char)scoreBoard[row][column]));
         for (String word : dict){
@@ -186,10 +188,11 @@ public class ScrabbleEngine {
                 column1 -= index;
             else 
                 row1 -= index;
-            if (!isValid(word, row1, column1, horizontal))
+            score1 = isValid(word, row1, column1, horizontal);
+            if (score1 == -1)
                 continue;
      //       System.out.println(word+" r "+row1+" c "+column1+" "+horizontal);
-            int score = computeScore(word, row1, column1, horizontal, new ScoreCalculator());            
+            int score = computeScore(word, row1, column1, horizontal, new ScoreCalculator()) + score1;            
             if (score > result.score){
                 result.word = word;
                 result.row = row1;
@@ -294,49 +297,50 @@ public class ScrabbleEngine {
     }
 
     
-    public boolean isValid(String word, int row, int column, boolean horizontal){
+    public int isValid(String word, int row, int column, boolean horizontal){
+        ScoreCalculator calculator1 = new ScoreCalculator();
         if (row < 0 || column < 0) {
-            return false;
+            return -1; //-1 means invalid
         }
         if (horizontal){
             //System.out.println("horizontal, " + word + column);
             if (column+word.length()>boardSize){
-                return false;
+                return -1;
             }
             
             for (int j = column; j < word.length()+column; j++){
                 if (scoreBoard[row][j] > 0){
                     if (word.charAt(j-column) != scoreBoard[row][j]){
-                        return false;
+                        return -1;
                     }
                 }    
             }
             //System.out.println("word within horizontal boundary + no overlap");
             if (column > 0 && scoreBoard[row][column-1] != 0){
-                return false;
+                return -1;
             }
             if (column+word.length() < boardSize && scoreBoard[row][word.length()+column] != 0){
-                return false;
+                return -1;
             }
         }
         else {
             if (row+word.length()>boardSize){ //boundary
-                return false;
+                return -1;
             }
             for (int i = row; i < word.length()+row; i++){ //no overlap
                 if (scoreBoard[i][column] > 0){
                     if (word.charAt(i-row) != scoreBoard[i][column]){
-                        return false;
+                        return -1;
                     }
                 }
             }
             //System.out.println("word within vertical boundary + no overlap");
             if (row > 0 && scoreBoard[row-1][column] != 0){
-                return false;
+                return -1;
             }
             // exceed bottom bound, or it connects to another word
             if (row+word.length() < boardSize && scoreBoard[row+word.length()][column] != 0){
-                return false;
+                return -1;
             }
         }
         List<BestResult> results;
@@ -344,14 +348,17 @@ public class ScrabbleEngine {
             results = checkVerticalWord(word, row, column); //loop through list, check every word to see if valid        
         else
             results = checkHorizontalWord(word, row, column); //same
+        int score = 0;
         for (BestResult result : results) {
             if (!dict.contains(result.word)){
-                return false;
-            }
-            System.out.println(result.word + result.horizontal);
+                return -1;
+            } //-1 means invalid, 0 above means score of extra words
+            
+            int score1 = computeScore(result.word, result.row, result.column, horizontal, calculator1);
+            score += score1;
+            System.out.println(score + result.word + result.horizontal);
         }
-        
-        return true;
+        return score;
     }
     public boolean isAboveEmpty(int row, int col){
         int i = row-1;
