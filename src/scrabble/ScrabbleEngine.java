@@ -144,39 +144,39 @@ public class ScrabbleEngine {
     public int computeScore(String word, int row, int column, boolean horizontal, ScoreCalculator calculator){
         StringBuilder builder = new StringBuilder();
         int multiplier = 1;
-        if (horizontal == true) {
-        for (int j = column; j<word.length()+column; j++){
-            if (scoreBoard[row][j] > 0)
-                continue;            
-            if (scoreMod[row][j] == 2){
-                builder.append(word.charAt(j-column));
+        if (horizontal) {
+            for (int j = column; j<word.length()+column; j++){
+                if (scoreBoard[row][j] > 0)
+                    continue;            
+                if (scoreMod[row][j] == 2){
+                    builder.append(word.charAt(j-column));
+                }
+                else if (scoreMod[row][j] == 3){
+                    builder.append(word.charAt(j-column));
+                    builder.append(word.charAt(j-column));
+                }
+                else if (scoreMod[row][j] >= 20){
+                    multiplier *= scoreMod[row][j]/10;
+                }        
             }
-            else if (scoreMod[row][j] == 3){
-                builder.append(word.charAt(j-column));
-                builder.append(word.charAt(j-column));
-            }
-            else if (scoreMod[row][j] >= 20){
-                multiplier *= scoreMod[row][j]/10;
-            }        
         }
-        }
-        else if (horizontal == false){
+        else {
             for (int i = row; i<word.length()+row; i++){
                 if (scoreBoard[i][column] > 0)
                     continue;   
                 if (scoreMod[i][column] == 2){
                     builder.append(word.charAt(i-row));
-            }
-            else if (scoreMod[i][column] == 3){
-                builder.append(word.charAt(i-row));
-                builder.append(word.charAt(i-row));
-            }
-            else if (scoreMod[i][column] >= 20){
-                multiplier *= scoreMod[i][column]/10;
-            }        
+                }
+                else if (scoreMod[i][column] == 3){
+                    builder.append(word.charAt(i-row));
+                    builder.append(word.charAt(i-row));
+                }
+                else if (scoreMod[i][column] >= 20){
+                    multiplier *= scoreMod[i][column]/10;
+                }        
             }
         }
-    //    System.out.println(builder + " Multiplier is " + multiplier);
+        System.out.println(word+"-"+builder + " Multiplier is " + multiplier+" at "+row+" "+column);
         
         return calculator.calculate(word+builder, multiplier);
     }
@@ -362,7 +362,7 @@ public class ScrabbleEngine {
                 return -1;
             } //-1 means invalid, 0 above means score of extra words
             score = computeScore(result.word, result.row, result.column, horizontal, calculator1);
-            System.out.println("score "+score + " "+result.word + result.horizontal);
+            System.out.println("score "+score + " "+result.word + " "+result.horizontal);
         }
         return score;
     }
