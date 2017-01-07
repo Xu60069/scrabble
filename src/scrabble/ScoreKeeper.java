@@ -410,8 +410,15 @@ public class ScoreKeeper extends javax.swing.JFrame {
         int rowInt = Integer.parseInt(row);
         int columnInt = Integer.parseInt(column);
         System.out.println("Row = "+row+", column = "+column+". Horizontal = "+horizontalBox.isSelected()+".");
+        int score1 = engine.isValid(word, rowInt, columnInt, horizontalBox.isSelected());
+        if (score1 == -1){
+            System.out.println("Word is invalid.");
+            return;
+        }
+        calculator.addExtraScore(score1);
         int score = engine.computeScore(word, rowInt, columnInt, horizontalBox.isSelected(), calculator);
         scoreField.setText(""+score);
+        engine.enterWord(word, rowInt, columnInt, horizontalBox.isSelected(), score, true);
         display.setText(engine.printBoard());
     }
     private void addButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButton1ActionPerformed
@@ -484,6 +491,12 @@ public class ScoreKeeper extends javax.swing.JFrame {
         }    
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        engine.reloadGame();
+        display.setText(engine.printBoard());
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -539,6 +552,7 @@ public class ScoreKeeper extends javax.swing.JFrame {
     private javax.swing.JCheckBox horizontalBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
