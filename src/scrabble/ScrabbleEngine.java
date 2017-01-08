@@ -157,7 +157,8 @@ public class ScrabbleEngine {
                 }
                 else if (scoreMod[row][j] >= 20){
                     multiplier *= scoreMod[row][j]/10;
-                }        
+                }  
+                System.out.println(word+"-"+builder + " Multiplier is " + multiplier+" at "+row+" "+j+" mod "+scoreMod[row][j]);      
             }
         }
         else {
@@ -173,7 +174,8 @@ public class ScrabbleEngine {
                 }
                 else if (scoreMod[i][column] >= 20){
                     multiplier *= scoreMod[i][column]/10;
-                }        
+                }  
+                System.out.println(word+"-"+builder + " vert Multiplier is " + multiplier+" at "+i+" "+column+" mod "+scoreMod[i][column]);       
             }
         }
         System.out.println(word+"-"+builder + " Multiplier is " + multiplier+" at "+row+" "+column);
@@ -361,7 +363,7 @@ public class ScrabbleEngine {
             if (!dict.contains(result.word)){
                 return -1;
             } //-1 means invalid, 0 above means score of extra words
-            score = computeScore(result.word, result.row, result.column, horizontal, calculator1);
+            score = computeScore(result.word, result.row, result.column, !horizontal, calculator1);
             System.out.println("score "+score + " "+result.word + " "+result.horizontal);
         }
         return score;
