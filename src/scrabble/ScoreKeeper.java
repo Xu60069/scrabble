@@ -14,6 +14,7 @@ public class ScoreKeeper extends javax.swing.JFrame {
 
     /**
      * Creates new form ScrabbleScore
+     * make sure word cant go on top
      */
     public ScoreKeeper() {
         initComponents();
